@@ -52,10 +52,26 @@ describe GhostWriter do
       clear_output("api_examples")
     end
 
-    it "generate api doc file" do
-      ENV["GENERATE_API_DOC"] = "1"
-      group.run(NullObject.new)
-      File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should be_true
+    context 'ENV["GENERATE_API_DOC"] is true' do
+      before do
+        ENV["GENERATE_API_DOC"] = "1"
+      end
+
+      it "generate api doc file" do
+        group.run(NullObject.new)
+        File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should be_true
+      end
+    end
+
+    context 'ENV["GENERATE_API_DOC"] is true' do
+      before do
+        ENV["GENERATE_API_DOC"] = nil
+      end
+
+      it "does not generate api doc file" do
+        group.run(NullObject.new)
+        File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should be_false
+      end
     end
   end
 
