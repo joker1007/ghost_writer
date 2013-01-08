@@ -20,6 +20,12 @@ Or install it yourself as:
 
 Write controller spec:
 ```ruby
+# spec_helper
+RSpec.configure do |config|
+  config.include GhostWriter
+end
+
+# posts_controller_spec
 require 'spec_helper'
 
 describe PostsController do
@@ -27,6 +33,11 @@ describe PostsController do
     it "should be success", generate_api_doc: true do # Add metadata :generate_api_doc
       get :index
       response.should be_success
+    end
+
+    it "should be success", generate_api_doc: "index_error" do # if metadata value is string, use it as filename
+      get :index
+      response.status.should eq 404
     end
   end
 end
