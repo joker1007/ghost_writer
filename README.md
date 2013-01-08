@@ -1,6 +1,6 @@
 # GhostWriter
 
-TODO: Write a gem description
+Generate API examples from params and response of controller specs
 
 ## Installation
 
@@ -18,7 +18,30 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Write controller spec:
+```ruby
+require 'spec_helper'
+
+describe PostsController do
+  describe "GET index" do
+    it "should be success", generate_api_doc: true do # Add metadata :generate_api_doc
+      get :index
+      response.should be_success
+    end
+  end
+end
+```
+
+And set environment variable GENERATE_API_DOC at runtime
+```
+GENERATE_API_DOC=1 bundle exec rspec spec
+-> generate docs at [Rails.root]/doc/api_examples
+```
+
+If you don't set environment variable, this gem doesn't generate docs.
+
+## TODO
+- support more output formats (now markdown only)
 
 ## Contributing
 

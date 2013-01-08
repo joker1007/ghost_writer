@@ -8,9 +8,9 @@ Gem::Specification.new do |gem|
   gem.version       = GhostWriter::VERSION
   gem.authors       = ["joker1007"]
   gem.email         = ["kakyoin.hierophant@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{Generate API examples from params and response of controller specs}
+  gem.summary       = %q{Generate API examples from params and response of controller specs}
+  gem.homepage      = "https://github.com/joker1007/ghost_writer"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
