@@ -34,8 +34,8 @@ describe GhostWriter do
         end
       end
 
-      describe "GET index" do
-        it "should be success", generate_api_doc: true do
+      describe "GET /anonymous" do
+        it "returns Resources array", generate_api_doc: true do
           begin
             get :index, param1: "value"
             response.should be_success
@@ -45,8 +45,8 @@ describe GhostWriter do
         end
       end
 
-      describe "GET show" do
-        it "should be success", generate_api_doc: true do
+      describe "GET /anonymous/1.json" do
+        it "returns a Resource json", generate_api_doc: true do
           begin
             get :show, id: 1, format: :json, param1: "value", params2: ["value1", "value2"]
             response.should be_success
