@@ -33,7 +33,7 @@ describe GhostWriter do
       describe "GET index" do
         it "should be success", generate_api_doc: true do
           begin
-            get :index
+            get :index, param1: "value"
             response.should be_success
           rescue Exception => e
             p e
@@ -63,7 +63,7 @@ describe GhostWriter do
       end
     end
 
-    context 'ENV["GENERATE_API_DOC"] is true' do
+    context 'ENV["GENERATE_API_DOC"] is false' do
       before do
         ENV["GENERATE_API_DOC"] = nil
       end
