@@ -80,7 +80,7 @@ describe GhostWriter do
       end
 
       context "Given github_base_url" do
-        let(:github_base_url) { "https://github.com/joker1007/ghost_writer/tree/master/ouput_examples" }
+        let(:github_base_url) { "https://github.com/joker1007/ghost_writer/tree/master/output_examples" }
         it "create index file written github links" do
           GhostWriter.github_base_url = github_base_url
           group.run(NullObject.new)
