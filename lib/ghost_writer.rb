@@ -1,14 +1,40 @@
 require "ghost_writer/version"
 require "ghost_writer/document"
+require "ghost_writer/document_index"
 require "active_support/concern"
 
 module GhostWriter
   extend ActiveSupport::Concern
 
-  mattr_accessor :output_dir
+  module Format
+    autoload "Markdown", "ghost_writer/format/markdown"
+  end
 
-  def generate_api_doc
-    @@output_path = @@output_dir ? Rails.root + "doc" + @@output_dir : Rails.root + "doc" + "api_examples"
+  DOCUMENT_INDEX_FILENAME = "document_index.markdown"
+
+  class << self
+    attr_accessor :output_dir, :github_base_url
+
+    def documents
+      @documents ||= []
+      @documents
+    end
+
+    def generate_api_doc
+      if ENV["GENERATE_API_DOC"]
+        document_index = GhostWriter::DocumentIndex.new(output_path + DOCUMENT_INDEX_FILENAME, documents)
+        document_index.write_file
+        @documents.each(&:write_file)
+        @documents.clear
+      end
+    end
+
+    def output_path
+      output_dir ? Rails.root + "doc" + output_dir : Rails.root + "doc" + "api_examples"
+    end
+  end
+
+  def collect_example
     unless File.exist?(doc_dir)
       FileUtils.mkdir_p(doc_dir)
     end
@@ -22,12 +48,12 @@ module GhostWriter
       status_example: response.status.inspect,
       response_example: response.body,
     })
-    document.write_file
+    GhostWriter.documents << document
   end
 
   private
   def doc_dir
-    @@output_path + described_class.to_s.underscore
+    GhostWriter.output_path + described_class.to_s.underscore
   end
 
   def doc_name
@@ -41,8 +67,12 @@ module GhostWriter
   included do
     after do
       if example.metadata[:type] == :controller && example.metadata[:generate_api_doc]
-        generate_api_doc if ENV["GENERATE_API_DOC"]
+        collect_example if ENV["GENERATE_API_DOC"]
       end
+    end
+
+    after(:suite) do
+      GhostWriter.generate_api_doc
     end
   end
 end

@@ -28,12 +28,27 @@ describe GhostWriter do
           ]
           render json: collection.as_json
         end
+
+        def show
+          render json: {id: 1, name: "name"}
+        end
       end
 
       describe "GET index" do
         it "should be success", generate_api_doc: true do
           begin
             get :index, param1: "value"
+            response.should be_success
+          rescue Exception => e
+            p e
+          end
+        end
+      end
+
+      describe "GET show" do
+        it "should be success", generate_api_doc: true do
+          begin
+            get :show, id: 1, format: :json, param1: "value", params2: ["value1", "value2"]
             response.should be_success
           rescue Exception => e
             p e
@@ -59,7 +74,19 @@ describe GhostWriter do
 
       it "generate api doc file" do
         group.run(NullObject.new)
+        GhostWriter.generate_api_doc
         File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should be_true
+        File.read(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should =~ /# AnonymousController Index/
+      end
+
+      context "Given github_base_url" do
+        let(:github_base_url) { "https://github.com/joker1007/ghost_writer/tree/master/ouput_examples" }
+        it "create index file written github links" do
+          GhostWriter.github_base_url = github_base_url
+          group.run(NullObject.new)
+          GhostWriter.generate_api_doc
+          File.read(Rails.root + "doc" + "api_examples" + GhostWriter::DOCUMENT_INDEX_FILENAME).should =~ /#{github_base_url}/
+        end
       end
     end
 
@@ -70,6 +97,7 @@ describe GhostWriter do
 
       it "does not generate api doc file" do
         group.run(NullObject.new)
+        GhostWriter.generate_api_doc
         File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should be_false
       end
     end
@@ -91,7 +119,9 @@ describe GhostWriter do
     it "generate api doc file" do
       ENV["GENERATE_API_DOC"] = "1"
       group.run(NullObject.new)
+      GhostWriter.generate_api_doc
       File.exist?(Rails.root + "doc" + output_dir + "anonymous_controller" + "index.markdown").should be_true
+      File.read(Rails.root + "doc" + output_dir + "anonymous_controller" + "index.markdown").should =~ /# AnonymousController Index/
     end
   end
 

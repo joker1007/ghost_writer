@@ -1,8 +1,10 @@
 class GhostWriter::Document
-  attr_reader :title, :description, :location, :url_example, :param_example, :status_example, :response_example, :output
+  attr_reader :title, :description, :location, :url_example, :param_example, :status_example, :response_example, :output, :relative_path
 
   def initialize(output, attrs)
-    @output = output
+    extend(GhostWriter::Format::Markdown)
+    @output           = output
+    @relative_path    = Pathname.new(output).relative_path_from(GhostWriter.output_path)
     @title            = attrs[:title]
     @description      = attrs[:description]
     @location         = attrs[:location]
@@ -47,19 +49,6 @@ EOP
   end
 
   private
-  # TODO: outputのフォーマットを選択可能に
-  def headword(text, level = 1)
-    "#{'#'*level} #{text}"
-  end
-
-  def paragraph(text)
-    text + "\n"
-  end
-
-  def quote(text, quote_format = nil)
-    "```#{quote_format}\n#{text}\n```"
-  end
-
   def quote_response(body)
     if param_example[:format] && param_example[:format].to_sym == :json
       quote(arrange_json(response_example), :javascript)
