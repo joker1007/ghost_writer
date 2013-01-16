@@ -24,6 +24,8 @@ Write controller spec:
 # spec_helper
 RSpec.configure do |config|
   config.include GhostWriter
+  GhostWriter.output_dir = "api_docs" # Optional (default is "api_examples")
+  GhostWriter.github_base_url = "https://github.com/joker1007/ghost_writer/tree/master/output_examples" # Optional
 end
 
 # posts_controller_spec
@@ -51,6 +53,14 @@ GENERATE_API_DOC=1 bundle exec rspec spec
 ```
 
 If you don't set environment variable, this gem doesn't generate docs.
+
+## Output Example
+Please look at (output_examples)[https://github.com/joker1007/ghost_writer/tree/master/output_examples]
+
+## Config
+If output_dir is set, generate docs at [Rails.root]/doc/[output_dir]
+
+If github_base_url is set, link index is based on the url, like output_examples
 
 ## TODO
 - support more output formats (now markdown only)
