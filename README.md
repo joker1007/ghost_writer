@@ -24,6 +24,10 @@ Write controller spec:
 # spec_helper
 RSpec.configure do |config|
   config.include GhostWriter
+  config.after(:suite) do
+    GhostWriter.generate_api_doc
+  end
+
   GhostWriter.output_dir = "api_docs" # Optional (default is "api_examples")
   GhostWriter.github_base_url = "https://github.com/joker1007/ghost_writer/tree/master/output_examples" # Optional
 end

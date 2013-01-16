@@ -22,6 +22,9 @@ module GhostWriter
 
     def generate_api_doc
       if ENV["GENERATE_API_DOC"]
+        unless File.exist?(output_path)
+          FileUtils.mkdir_p(output_path)
+        end
         document_index = GhostWriter::DocumentIndex.new(output_path + DOCUMENT_INDEX_FILENAME, documents)
         document_index.write_file
         @documents.each(&:write_file)
@@ -35,10 +38,6 @@ module GhostWriter
   end
 
   def collect_example
-    unless File.exist?(doc_dir)
-      FileUtils.mkdir_p(doc_dir)
-    end
-
     document = GhostWriter::Document.new(File.join(doc_dir, "#{doc_name}.markdown"), {
       title: "#{described_class} #{doc_name.titleize}",
       description: example.full_description.dup,
@@ -69,10 +68,6 @@ module GhostWriter
       if example.metadata[:type] == :controller && example.metadata[:generate_api_doc]
         collect_example if ENV["GENERATE_API_DOC"]
       end
-    end
-
-    after(:suite) do
-      GhostWriter.generate_api_doc
     end
   end
 end

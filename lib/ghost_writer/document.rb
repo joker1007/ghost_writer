@@ -15,6 +15,9 @@ class GhostWriter::Document
   end
 
   def write_file
+    unless File.exist?(File.dirname(output))
+      FileUtils.mkdir_p(File.dirname(output))
+    end
     doc = File.open(output, "w")
 
     doc.write paragraph(<<EOP)
