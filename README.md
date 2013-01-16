@@ -1,5 +1,6 @@
 # GhostWriter
-[![Build Status](https://travis-ci.org/joker1007/ghost_writer.png)](https://travis-ci.org/joker1007/ghost\_writer)
+[![Build Status](https://travis-ci.org/joker1007/ghost_writer.png)](https://travis-ci.org/joker1007/ghost_writer)
+
 Generate API examples from params and response of controller specs
 
 ## Installation
@@ -20,12 +21,12 @@ Or install it yourself as:
 
 Write controller spec:
 ```ruby
-# spec\_helper
+# spec_helper
 RSpec.configure do |config|
   config.include GhostWriter
 end
 
-# posts\_controller\_spec
+# posts_controller_spec
 require 'spec_helper'
 
 describe PostsController do
