@@ -55,10 +55,10 @@ GENERATE_API_DOC=1 bundle exec rspec spec
 If you don't set environment variable, this gem doesn't generate docs.
 
 ## Output Example
-Please look at (output_examples)[https://github.com/joker1007/ghost_writer/tree/master/output_examples]
+Please look at [output_examples](https://github.com/joker1007/ghost_writer/tree/master/output_examples)
 
 ## Config
-If output_dir is set, generate docs at [Rails.root]/doc/[output_dir]
+If output_dir is set, generate docs at `[Rails.root]/doc/[output_dir]`
 
 If github_base_url is set, link index is based on the url, like output_examples
 
