@@ -1,5 +1,6 @@
 # GhostWriter
 [![Build Status](https://travis-ci.org/joker1007/ghost_writer.png)](https://travis-ci.org/joker1007/ghost_writer)
+[![Gem Version](https://badge.fury.io/rb/ghost_writer.png)](http://badge.fury.io/rb/ghost_writer)
 
 Generate API examples from params and response of controller specs
 
