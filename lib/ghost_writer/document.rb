@@ -67,5 +67,7 @@ EOP
     else
       data
     end
+  rescue MultiJson::DecodeError
+    body
   end
 end
