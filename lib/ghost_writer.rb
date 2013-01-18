@@ -27,7 +27,7 @@ module GhostWriter
         end
         document_index = GhostWriter::DocumentIndex.new(output_path + DOCUMENT_INDEX_FILENAME, documents)
         document_index.write_file
-        @documents.each(&:write_file)
+        @documents.sort_by{|d| d.description}.each(&:write_file)
         @documents.clear
       end
     end
