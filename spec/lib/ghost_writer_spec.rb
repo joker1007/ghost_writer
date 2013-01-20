@@ -60,10 +60,7 @@ describe GhostWriter do
 
   context "Not given output_dir" do
     before do
-      clear_output("api_examples")
-    end
-
-    after do
+      GhostWriter.output_dir = nil
       clear_output("api_examples")
     end
 
@@ -113,7 +110,6 @@ describe GhostWriter do
 
     after do
       GhostWriter.output_dir = nil
-      clear_output(output_dir)
     end
 
     it "generate api doc file" do

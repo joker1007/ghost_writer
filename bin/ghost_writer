@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+require "trollop"
+require "rspec"
+require "ghost_writer"
+
+GhostWriter.output_flag = true
+
+parser = Trollop::Parser.new do
+  version "ghost_writer v#{GhostWriter::VERSION}"
+  banner <<-EOS
+Generate API Examples using Controller spec parameters.
+
+Usage:
+       ghost_writer [options] <spec file or directory>
+
+where [options] are:
+EOS
+
+  opt :output, "Output directory", :type => String
+  opt :clear, "[Caution] Clear Output directory before running specs", :default => false
+end
+
+opts = Trollop::with_standard_exception_handling parser do
+  raise Trollop::HelpNeeded if ARGV.empty?
+  parser.parse ARGV
+end
+
+RSpec.configure do |c|
+  c.include GhostWriter
+  GhostWriter.output_dir = opts[:output]
+  c.after(:suite) do
+    GhostWriter.generate_api_doc
+  end
+end
+
+if opts[:clear]
+  cmd = "rm -rf doc/#{GhostWriter.output_dir}"
+  puts cmd
+  system(cmd)
+end
+
+require "rspec/autorun"
