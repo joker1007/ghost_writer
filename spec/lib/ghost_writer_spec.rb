@@ -35,7 +35,16 @@ describe GhostWriter do
       end
 
       describe "GET /anonymous" do
-        it "returns Resources array", generate_api_doc: true do
+        it "first spec", generate_api_doc: true do
+          begin
+            get :index, param1: "value"
+            response.should be_success
+          rescue Exception => e
+            p e
+          end
+        end
+
+        it "second spec", generate_api_doc: true do
           begin
             get :index, param1: "value"
             response.should be_success
@@ -73,7 +82,10 @@ describe GhostWriter do
         group.run(NullObject.new)
         GhostWriter.generate_api_doc
         File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should be_true
-        File.read(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should =~ /# AnonymousController Index/
+        doc_body = File.read(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown")
+        doc_body.should =~ /# AnonymousController Index/
+        doc_body.should =~ /first spec/
+        doc_body.should =~ /second spec/
       end
 
       context "Given github_base_url" do

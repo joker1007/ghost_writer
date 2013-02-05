@@ -14,10 +14,12 @@ class GhostWriter::DocumentIndex
       base_url = ""
     end
 
-    document_list = documents.map do |document|
-      list(
-        link(document.description, base_url + "#{document.relative_path}")
-      )
+    document_list = documents.flat_map do |output, docs|
+      docs.map do |d|
+        list(
+          link(d.description, base_url + "#{d.relative_path}")
+        )
+      end
     end
 
     index_file = File.open(output, "w")

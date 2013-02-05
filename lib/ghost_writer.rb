@@ -17,9 +17,9 @@ module GhostWriter
     attr_writer :output_dir, :output_flag
     attr_accessor :github_base_url
 
-    def documents
-      @documents ||= []
-      @documents
+    def document_group
+      @document_group ||= {}
+      @document_group
     end
 
     def generate_api_doc
@@ -27,10 +27,14 @@ module GhostWriter
         unless File.exist?(output_path)
           FileUtils.mkdir_p(output_path)
         end
-        document_index = GhostWriter::DocumentIndex.new(output_path + DOCUMENT_INDEX_FILENAME, documents)
+        document_index = GhostWriter::DocumentIndex.new(output_path + DOCUMENT_INDEX_FILENAME, document_group)
         document_index.write_file
-        @documents.sort_by(&:description).each(&:write_file)
-        @documents.clear
+        document_group.each do |output, docs|
+          docs.shift.write_file(true)
+          docs.sort_by(&:description).each(&:write_file)
+        end
+
+        document_group.clear
       end
     end
 
@@ -48,7 +52,8 @@ module GhostWriter
   end
 
   def collect_example
-    document = GhostWriter::Document.new(File.join(doc_dir, "#{doc_name}.markdown"), {
+    output = File.join(doc_dir, "#{doc_name}.markdown")
+    document = GhostWriter::Document.new(output, {
       title: "#{described_class} #{doc_name.titleize}",
       description: example.full_description.dup,
       location: example.location.dup,
@@ -57,7 +62,8 @@ module GhostWriter
       status_example: response.status.inspect,
       response_example: response.body,
     })
-    GhostWriter.documents << document
+    GhostWriter.document_group[output] ||= []
+    GhostWriter.document_group[output] << document
   end
 
   private
