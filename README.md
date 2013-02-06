@@ -24,11 +24,7 @@ Write controller spec:
 ```ruby
 # spec_helper
 RSpec.configure do |config|
-  config.include GhostWriter
-  config.after(:suite) do
-    GhostWriter.generate_api_doc
-  end
-
+  # The difference with previous version. already no need including Module and Defining after hook
   GhostWriter.output_dir = "api_docs" # Optional (default is "api_examples")
   GhostWriter.github_base_url = "https://github.com/joker1007/ghost_writer/tree/master/output_examples" # Optional
 end
@@ -53,11 +49,13 @@ end
 
 And set environment variable GENERATE_API_DOC at runtime
 ```
-GENERATE_API_DOC=1 bundle exec rspec spec
+bundle exec ghost_writer spec/controllers
 -> generate docs at [Rails.root]/doc/api_examples
 ```
 
 If you don't set environment variable, this gem doesn't generate docs.
+
+*Caution: Using ghost_writer command and Defining after fook manually at the same time, after hook is executed twice, and so document_index is cleared.*
 
 ## Output Example
 Please look at [output_examples](https://github.com/joker1007/ghost_writer/tree/master/output_examples)
@@ -65,7 +63,7 @@ Please look at [output_examples](https://github.com/joker1007/ghost_writer/tree/
 ## Config
 If output_dir is set, generate docs at `[Rails.root]/doc/[output_dir]`
 
-If github_base_url is set, link index is based on the url, like output_examples
+If github\_base\_url is set, link index is based on the url, like output\_examples
 
 ## TODO
 - support more output formats (now markdown only)
