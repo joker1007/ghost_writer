@@ -21,6 +21,8 @@ Or install it yourself as:
 ## Usage
 
 Write controller spec:
+
+**Caution: Using ghost_writer command and Defining after fook manually at the same time, after hook is executed twice, because of it document_index is cleared.**
 ```ruby
 # spec_helper
 RSpec.configure do |config|
@@ -54,8 +56,6 @@ bundle exec ghost_writer spec/controllers
 ```
 
 If you don't set environment variable, this gem doesn't generate docs.
-
-*Caution: Using ghost_writer command and Defining after fook manually at the same time, after hook is executed twice, and so document_index is cleared.*
 
 ## Output Example
 Please look at [output_examples](https://github.com/joker1007/ghost_writer/tree/master/output_examples)
