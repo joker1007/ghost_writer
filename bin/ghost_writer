@@ -18,6 +18,7 @@ where [options] are:
 EOS
 
   opt :output, "Output directory", :type => String
+  opt :format, "Output doc format (default: markdown, availables: markdown, rst)", :type => String
   opt :clear, "[Caution] Clear Output directory before running specs", :default => false
 end
 
@@ -29,6 +30,7 @@ end
 RSpec.configure do |c|
   c.include GhostWriter
   GhostWriter.output_dir = opts[:output]
+  GhostWriter.output_format = opts[:format].to_sym if opts[:format]
   c.after(:suite) do
     GhostWriter.generate_api_doc
   end
