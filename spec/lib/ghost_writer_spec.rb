@@ -117,6 +117,7 @@ describe GhostWriter do
 
     before do
       GhostWriter.output_dir = output_dir
+      GhostWriter.output_format = :rst
       clear_output(output_dir)
     end
 

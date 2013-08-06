@@ -2,13 +2,16 @@ module GhostWriter
   module Format
     module Markdown
       private
-      # TODO: outputのフォーマットを選択可能に
       def headword(text, level = 1)
         "#{'#'*level} #{text}"
       end
 
       def paragraph(text)
         text + "\n"
+      end
+
+      def separator(length)
+        "-" * length
       end
 
       def quote(text, quote_format = nil)

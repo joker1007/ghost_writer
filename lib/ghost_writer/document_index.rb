@@ -1,8 +1,10 @@
 class GhostWriter::DocumentIndex
   attr_reader :output, :documents
 
-  def initialize(output, documents)
-    extend(GhostWriter::Format::Markdown)
+  def initialize(output, documents, format)
+    format_module = "GhostWriter::Format::#{format.to_s.classify}"
+    extend(format_module.constantize)
+
     @output = output
     @documents = documents
   end

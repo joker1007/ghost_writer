@@ -8,13 +8,15 @@ module GhostWriter
 
   module Format
     autoload "Markdown", "ghost_writer/format/markdown"
+    autoload "Rst", "ghost_writer/format/rst"
   end
 
-  DEFAULT_OUTPUT_DIR = "api_examples"
-  DOCUMENT_INDEX_FILENAME = "document_index.markdown"
+  DEFAULT_OUTPUT_DIR = "api_examples".freeze
+  DEFAULT_FORMAT = :markdown
+  DOCUMENT_INDEX_FILENAME = "document_index".freeze
 
   class << self
-    attr_writer :output_dir, :output_flag
+    attr_writer :output_dir, :output_flag, :output_format
     attr_accessor :github_base_url
 
     def document_group
@@ -27,7 +29,7 @@ module GhostWriter
         unless File.exist?(output_path)
           FileUtils.mkdir_p(output_path)
         end
-        document_index = GhostWriter::DocumentIndex.new(output_path + DOCUMENT_INDEX_FILENAME, document_group)
+        document_index = GhostWriter::DocumentIndex.new(output_path + "#{DOCUMENT_INDEX_FILENAME}.#{output_format}", document_group, GhostWriter.output_format)
         document_index.write_file
         document_group.each do |output, docs|
           docs.sort_by!(&:description)
@@ -50,10 +52,14 @@ module GhostWriter
     def output_path
       Rails.root + "doc" + output_dir
     end
+
+    def output_format
+      @output_format || DEFAULT_FORMAT
+    end
   end
 
   def collect_example
-    output = File.join(doc_dir, "#{doc_name}.markdown")
+    output = File.join(doc_dir, "#{doc_name}.#{GhostWriter.output_format}")
     document = GhostWriter::Document.new(output, {
       title: "#{described_class} #{doc_name.titleize}",
       description: example.full_description.dup,
@@ -62,7 +68,9 @@ module GhostWriter
       param_example: controller.params.reject {|key, val| key == "controller" || key == "action"},
       status_example: response.status.inspect,
       response_example: response.body,
+      format: GhostWriter.output_format
     })
+
     GhostWriter.document_group[output] ||= []
     GhostWriter.document_group[output] << document
   end
@@ -82,7 +90,7 @@ module GhostWriter
 
   included do
     after do
-      if example.metadata[:type] == :controller && example.metadata[:generate_api_doc]
+      if (example.metadata[:type] == :controller || example.metadata[:type] == :request) && example.metadata[:generate_api_doc]
         collect_example if GhostWriter.output_flag
       end
     end
