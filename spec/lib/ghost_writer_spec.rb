@@ -94,7 +94,7 @@ describe GhostWriter do
           GhostWriter.github_base_url = github_base_url
           group.run(NullObject.new)
           GhostWriter.generate_api_doc
-          File.read(Rails.root + "doc" + "api_examples" + GhostWriter::DOCUMENT_INDEX_FILENAME).should =~ /#{github_base_url}/
+          File.read(Rails.root + "doc" + "api_examples" + "#{GhostWriter::DOCUMENT_INDEX_FILENAME}.#{GhostWriter.output_format}").should =~ /#{github_base_url}/
         end
       end
     end
@@ -117,7 +117,6 @@ describe GhostWriter do
 
     before do
       GhostWriter.output_dir = output_dir
-      GhostWriter.output_format = :rst
       clear_output(output_dir)
     end
 
