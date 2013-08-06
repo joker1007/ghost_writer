@@ -20,7 +20,20 @@ Or install it yourself as:
 
 ## Usage
 
-Write controller spec:
+Write controller spec or request spec, and...
+
+```sh
+bundle exec ghost_writer spec/controllers # execute specs and generate docs at [Rails.root]/doc/api_examples
+```
+
+### Command options
+
+- --output, -o Set output directory
+- --format, -f Set output document format (markdown or rst)
+- --clear , -c Clear output directory before running specs
+
+
+## Spec helper configuration
 
 **Caution: Using ghost_writer command and Defining after fook manually at the same time, after hook is executed twice, because of it document_index is cleared.**
 ```ruby
@@ -50,21 +63,18 @@ describe PostsController do
 end
 ```
 
-And set environment variable GENERATE\_API\_DOC at runtime
-```
-bundle exec ghost_writer spec/controllers
--> generate docs at [Rails.root]/doc/api_examples
-```
+If `GhostWriter.output_dir` is set, generate docs at `[Rails.root]/doc/[output_dir]`
 
-If you don't set environment variable, this gem doesn't generate docs.
+If `GhostWriter.github_base_url` is set, link index is based on the url, like output\_examples
+
+And set environment variable `GENERATE_API_DOC` or `GhostWriter.output_flag` true at runtime.
+If you don't set, this gem doesn't generate docs.
 
 ## Output Example
 Please look at [output_examples](https://github.com/joker1007/ghost_writer/tree/master/output_examples)
 
-## Config
-If output_dir is set, generate docs at `[Rails.root]/doc/[output_dir]`
-
-If github\_base\_url is set, link index is based on the url, like output\_examples
+## License
+MIT
 
 ## Contributing
 
