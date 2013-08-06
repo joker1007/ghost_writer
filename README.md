@@ -28,6 +28,7 @@ Write controller spec:
 RSpec.configure do |config|
   # The difference with previous version. already no need including Module and Defining after hook
   GhostWriter.output_dir = "api_docs" # Optional (default is "api_examples")
+  GhostWriter.output_format = :rst # Optional (default is :markdown)
   GhostWriter.github_base_url = "https://github.com/joker1007/ghost_writer/tree/master/output_examples" # Optional
 end
 
@@ -49,7 +50,7 @@ describe PostsController do
 end
 ```
 
-And set environment variable GENERATE_API_DOC at runtime
+And set environment variable GENERATE\_API\_DOC at runtime
 ```
 bundle exec ghost_writer spec/controllers
 -> generate docs at [Rails.root]/doc/api_examples
