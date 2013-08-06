@@ -70,6 +70,8 @@ If `GhostWriter.github_base_url` is set, link index is based on the url, like ou
 And set environment variable `GENERATE_API_DOC` or `GhostWriter.output_flag` true at runtime.
 If you don't set, this gem doesn't generate docs.
 
+`ghost_writer` command set `GhostWriter.output_flag` true automatically.
+
 ## Output Example
 Please look at [output_examples](https://github.com/joker1007/ghost_writer/tree/master/output_examples)
 
