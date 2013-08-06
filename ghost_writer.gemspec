@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Generate API examples from params and response of controller specs}
   gem.summary       = %q{Generate API examples from params and response of controller specs}
   gem.homepage      = "https://github.com/joker1007/ghost_writer"
+  gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
