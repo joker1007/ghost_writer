@@ -66,9 +66,6 @@ If output_dir is set, generate docs at `[Rails.root]/doc/[output_dir]`
 
 If github\_base\_url is set, link index is based on the url, like output\_examples
 
-## TODO
-- support more output formats (now markdown only)
-
 ## Contributing
 
 1. Fork it
