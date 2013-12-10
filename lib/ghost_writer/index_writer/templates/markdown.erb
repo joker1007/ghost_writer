@@ -1,0 +1,7 @@
+## API Examples
+
+<% document_group.each do |output, docs| -%>
+<% docs.each do |d| -%>
+- [<%= d.description %>](<%= base_url + d.relative_path.to_s %>)
+<% end %>
+<% end -%>
