@@ -1,3 +1,5 @@
+require 'multi_json'
+
 module GhostWriter
   module Format
     module Rack
@@ -15,7 +17,7 @@ RUBY
           docs.each do |d|
             rack += <<RUBY
     when [#{d.request_method.inspect}, #{d.path_info.inspect}]
-      if fuzzy_match(request.params, #{d.param_example.reject {|k, _| k == "format"}.inspect})
+      if fuzzy_match(request.params, #{parameter_arranging(d.param_example.reject {|k, _| k == "format"}).inspect})
         [200, {"Content-Type" => #{d.content_type.inspect}}, [(<<BODY)]]
 #{d.response_example}
 BODY
@@ -87,6 +89,10 @@ RUBY
 
       def extname
         "rb"
+      end
+
+      def parameter_arranging(params)
+        MultiJson.load(MultiJson.dump(params))
       end
     end
   end

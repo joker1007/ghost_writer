@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "activesupport", ">= 3.0.0"
   gem.add_dependency "rspec-rails", "~> 2.11"
   gem.add_dependency "trollop"
+  gem.add_dependency "multi_json"
 
   gem.add_development_dependency "rspec-rails", "~> 2.12"
   gem.add_development_dependency 'rake', ['>= 0']
