@@ -31,11 +31,13 @@ module GhostWriter
           FileUtils.mkdir_p(output_path)
         end
         document_index = GhostWriter::DocumentIndex.new(output_path + "#{DOCUMENT_INDEX_FILENAME}", document_group, GhostWriter.output_format)
-        document_index.write_index_file
+        document_index.write_file(format: output_format)
         document_group.each do |output, docs|
           docs.sort_by!(&:location)
-          docs.shift.write_file(true)
-          docs.each(&:write_file)
+          initial = docs.shift
+          initial.header = true
+          initial.write_file(format: output_format, overwrite: true)
+          docs.each {|d| d.write_file(format: output_format) }
         end
 
         document_group.clear
@@ -68,8 +70,8 @@ module GhostWriter
       request_method: request.env["REQUEST_METHOD"],
       path_info: request.env["PATH_INFO"],
       param_example: controller.params.reject {|key, val| key == "controller" || key == "action"},
-      status_example: response.status.inspect,
-      response_example: response.body,
+      status_code: response.status,
+      response_body: response.body,
       format: GhostWriter.output_format
     })
 

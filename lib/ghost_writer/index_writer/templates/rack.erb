@@ -1,0 +1,36 @@
+require 'rack'
+
+class MockServer
+  def call(env)
+    request = Rack::Request.new(env)
+    params = recursive_to_s(request.params)
+    case [request.request_method, request.path_info, params]
+    <% document_group.each do |output, docs| -%>
+    <% docs.each do |d| -%>
+    when [<%= d.request_method.inspect %>, <%= d.path_info.inspect %>, recursive_to_s(<%= MultiJson.load(d.serialized_params).inspect %>)]
+      [200, {"Content-Type" => <%= d.content_type.inspect %>}, [(<<BODY)]]
+<%= d.response_body %>
+BODY
+    <% end %>
+    <% end -%>
+    else
+      [404, {"Content-Type" => "text/html"}, ['No match rule']]
+    end
+  end
+
+  def recursive_to_s(params)
+    case params
+    when Hash
+      params.each do |k, v|
+        params[k] = recursive_to_s(v)
+      end
+    when Array
+      params.map do |v|
+        recursive_to_s(v)
+      end
+    else
+      params.to_s
+    end
+  end
+end
+
