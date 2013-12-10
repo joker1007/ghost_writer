@@ -60,7 +60,7 @@ module GhostWriter
   end
 
   def collect_example
-    output = File.join(doc_dir, "#{doc_name}.#{GhostWriter.output_format}")
+    output = File.join(doc_dir, "#{doc_name}")
     document = GhostWriter::Document.new(output, {
       title: "#{described_class} #{doc_name.titleize}",
       description: example.full_description.dup,
