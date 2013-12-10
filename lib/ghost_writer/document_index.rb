@@ -1,4 +1,5 @@
 require 'ghost_writer/index_writer'
+require 'ghost_writer/index_writer/rack'
 
 class GhostWriter::DocumentIndex
   attr_reader :basename, :document_group
@@ -11,6 +12,9 @@ class GhostWriter::DocumentIndex
   def write_file(options = {})
     writer = GhostWriter::IndexWriter.new(self, options)
     writer.write_file
+
+    rack_writer = GhostWriter::IndexWriter::Rack.new(self)
+    rack_writer.write_file
   end
 
   def base_url

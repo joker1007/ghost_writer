@@ -41,9 +41,19 @@ class GhostWriter::Document
     end
   end
 
+  def content_type
+    if response_format == "json"
+      "application/json; charset=UTF-8"
+    else
+      "text/html; charset=UTF-8"
+    end
+  end
+
   private
 
   def arrange_json(body)
+    return body unless response_format == "json"
+
     data = ActiveSupport::JSON.decode(body)
     if data.is_a?(Array) || data.is_a?(Hash)
       JSON.pretty_generate(data)
