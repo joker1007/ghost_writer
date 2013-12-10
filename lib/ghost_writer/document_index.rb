@@ -9,7 +9,7 @@ class GhostWriter::DocumentIndex
     @documents = documents
   end
 
-  def write_file
+  def write_index_file
     if GhostWriter.github_base_url
       base_url = GhostWriter.github_base_url + "/"
     else
@@ -24,7 +24,7 @@ class GhostWriter::DocumentIndex
       end
     end
 
-    index_file = File.open(output, "w")
+    index_file = File.open("#{output}.#{extname}", "w")
     index_file.write paragraph(<<EOP)
 #{headword("API Examples")}
 #{document_list.join("\n")}
