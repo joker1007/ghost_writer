@@ -2,6 +2,11 @@ module GhostWriter
   module Format
     module Markdown
       private
+
+      def extname
+        "md"
+      end
+
       def headword(text, level = 1)
         "#{'#'*level} #{text}"
       end

@@ -81,8 +81,8 @@ describe GhostWriter do
       it "generate api doc file" do
         group.run(NullObject.new)
         GhostWriter.generate_api_doc
-        File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should be_true
-        doc_body = File.read(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown")
+        File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.md").should be_true
+        doc_body = File.read(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.md")
         doc_body.should =~ /# AnonymousController Index/
         doc_body.should =~ /first spec/
         doc_body.should =~ /second spec/
@@ -94,7 +94,7 @@ describe GhostWriter do
           GhostWriter.github_base_url = github_base_url
           group.run(NullObject.new)
           GhostWriter.generate_api_doc
-          File.read(Rails.root + "doc" + "api_examples" + "#{GhostWriter::DOCUMENT_INDEX_FILENAME}.#{GhostWriter.output_format}").should =~ /#{github_base_url}/
+          File.read(Rails.root + "doc" + "api_examples" + "#{GhostWriter::DOCUMENT_INDEX_FILENAME}.md").should =~ /#{github_base_url}/
         end
       end
     end
@@ -107,7 +107,7 @@ describe GhostWriter do
       it "does not generate api doc file" do
         group.run(NullObject.new)
         GhostWriter.generate_api_doc
-        File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.markdown").should be_false
+        File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.md").should be_false
       end
     end
   end
@@ -128,8 +128,8 @@ describe GhostWriter do
       ENV["GENERATE_API_DOC"] = "1"
       group.run(NullObject.new)
       GhostWriter.generate_api_doc
-      File.exist?(Rails.root + "doc" + output_dir + "anonymous_controller" + "index.markdown").should be_true
-      File.read(Rails.root + "doc" + output_dir + "anonymous_controller" + "index.markdown").should =~ /# AnonymousController Index/
+      File.exist?(Rails.root + "doc" + output_dir + "anonymous_controller" + "index.md").should be_true
+      File.read(Rails.root + "doc" + output_dir + "anonymous_controller" + "index.md").should =~ /# AnonymousController Index/
     end
   end
 

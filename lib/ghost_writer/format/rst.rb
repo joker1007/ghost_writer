@@ -2,6 +2,11 @@ module GhostWriter
   module Format
     module Rst
       private
+
+      def extname
+        "rst"
+      end
+
       def headword(text, level = 1)
         char = case level
                when 1
