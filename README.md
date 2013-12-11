@@ -3,7 +3,9 @@
 [![Gem Version](https://badge.fury.io/rb/ghost_writer.png)](http://badge.fury.io/rb/ghost_writer)
 [![Code Climate](https://codeclimate.com/github/joker1007/ghost_writer.png)](https://codeclimate.com/github/joker1007/ghost_writer)
 
-Generate API examples from params and response of controller specs
+Generate API examples from params and response of controller/request specs
+
+(Experimental: Generate Rack mock server from params and response of controller/request specs )
 
 ## Installation
 
