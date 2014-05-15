@@ -2,6 +2,7 @@ require "ghost_writer/version"
 require "ghost_writer/document"
 require "ghost_writer/document_index"
 require "active_support/concern"
+require "multi_json"
 
 module GhostWriter
   extend ActiveSupport::Concern

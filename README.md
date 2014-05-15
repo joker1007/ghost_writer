@@ -5,8 +5,6 @@
 
 Generate API examples from params and response of controller/request specs
 
-(Experimental: Generate Rack mock server from params and response of controller/request specs )
-
 ## Installation
 
 Add this line to your application's Gemfile:
