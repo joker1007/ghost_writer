@@ -1,12 +1,12 @@
 require "spec_helper"
 
-class AnonymousController
+class AnonymousController < ActionController::Base
 end
 
 describe GhostWriter do
 
   let(:group) do
-    RSpec::Core::ExampleGroup.describe do
+    RSpec::Core::ExampleGroup.describe AnonymousController, type: :controller do
       include RSpec::Rails::ControllerExampleGroup
       include GhostWriter
 
@@ -38,7 +38,7 @@ describe GhostWriter do
         it "first spec", generate_api_doc: true do
           begin
             get :index, param1: "value"
-            response.should be_success
+            expect(response).to be_success
           rescue Exception => e
             p e
           end
@@ -47,7 +47,7 @@ describe GhostWriter do
         it "second spec", generate_api_doc: true do
           begin
             get :index, param1: "value"
-            response.should be_success
+            expect(response).to be_success
           rescue Exception => e
             p e
           end
@@ -58,7 +58,7 @@ describe GhostWriter do
         it "returns a Resource json", generate_api_doc: true do
           begin
             get :show, id: 1, format: :json, param1: "value", params2: ["value1", "value2"]
-            response.should be_success
+            expect(response).to be_success
           rescue Exception => e
             p e
           end
@@ -81,11 +81,12 @@ describe GhostWriter do
       it "generate api doc file" do
         group.run(NullObject.new)
         GhostWriter.generate_api_doc
-        File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.md").should be_true
-        doc_body = File.read(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.md")
-        doc_body.should =~ /# AnonymousController Index/
-        doc_body.should =~ /first spec/
-        doc_body.should =~ /second spec/
+        path = Pathname("api_examples") + "anonymous_controller" + "index.md"
+        expect(path).to be_exist
+        doc_body = File.read(path)
+        expect(doc_body).to match(/# AnonymousController Index/)
+        expect(doc_body).to match(/first spec/)
+        expect(doc_body).to match(/second spec/)
       end
 
       context "Given github_base_url" do
@@ -94,7 +95,8 @@ describe GhostWriter do
           GhostWriter.github_base_url = github_base_url
           group.run(NullObject.new)
           GhostWriter.generate_api_doc
-          File.read(Rails.root + "doc" + "api_examples" + "#{GhostWriter::DOCUMENT_INDEX_FILENAME}.md").should =~ /#{github_base_url}/
+          path = Pathname("api_examples") + "#{GhostWriter::DOCUMENT_INDEX_FILENAME}.md"
+          expect(File.read(path)).to match(/#{github_base_url}/)
         end
       end
     end
@@ -107,7 +109,7 @@ describe GhostWriter do
       it "does not generate api doc file" do
         group.run(NullObject.new)
         GhostWriter.generate_api_doc
-        File.exist?(Rails.root + "doc" + "api_examples" + "anonymous_controller" + "index.md").should be_false
+        expect(Pathname("api_examples") + "anonymous_controller" + "index.md").not_to be_exist
       end
     end
   end
@@ -128,14 +130,15 @@ describe GhostWriter do
       ENV["GENERATE_API_DOC"] = "1"
       group.run(NullObject.new)
       GhostWriter.generate_api_doc
-      File.exist?(Rails.root + "doc" + output_dir + "anonymous_controller" + "index.md").should be_true
-      File.read(Rails.root + "doc" + output_dir + "anonymous_controller" + "index.md").should =~ /# AnonymousController Index/
+      path = Pathname(output_dir) + "anonymous_controller" + "index.md"
+      expect(path).to be_exist
+      expect(File.read(path)).to match(/# AnonymousController Index/)
     end
   end
 
   def clear_output(dirname)
-    if File.exist?(Rails.root + "doc" + dirname)
-      FileUtils.rm_r(Rails.root + "doc" + dirname)
+    if File.exist?(dirname)
+      FileUtils.rm_r(dirname)
     end
   end
 end

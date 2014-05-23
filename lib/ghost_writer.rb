@@ -1,3 +1,4 @@
+require 'rspec/rails'
 require "ghost_writer/version"
 require "ghost_writer/document"
 require "ghost_writer/document_index"
@@ -28,10 +29,10 @@ module GhostWriter
 
     def generate_api_doc
       if output_flag
-        unless File.exist?(output_path)
-          FileUtils.mkdir_p(output_path)
+        unless File.exist?(output_dir)
+          FileUtils.mkdir_p(output_dir)
         end
-        document_index = GhostWriter::DocumentIndex.new(output_path + "#{DOCUMENT_INDEX_FILENAME}", document_group, GhostWriter.output_format)
+        document_index = GhostWriter::DocumentIndex.new(output_dir + "#{DOCUMENT_INDEX_FILENAME}", document_group, GhostWriter.output_format)
         document_index.write_file(format: output_format)
         document_group.each do |output, docs|
           docs.sort_by!(&:location)
@@ -50,11 +51,7 @@ module GhostWriter
     end
 
     def output_dir
-      @output_dir ? @output_dir : DEFAULT_OUTPUT_DIR
-    end
-
-    def output_path
-      Rails.root + "doc" + output_dir
+      @output_dir ? Pathname(@output_dir) : Pathname(DEFAULT_OUTPUT_DIR)
     end
 
     def output_format
@@ -62,10 +59,10 @@ module GhostWriter
     end
   end
 
-  def collect_example
-    output = File.join(doc_dir, "#{doc_name}")
+  def collect_example(example)
+    output = doc_dir + doc_name(example)
     document = GhostWriter::Document.new(output, {
-      title: "#{described_class} #{doc_name.titleize}",
+      title: "#{described_class} #{doc_name(example).titleize}",
       description: example.full_description.dup,
       location: example.location.dup,
       request_method: request.env["REQUEST_METHOD"],
@@ -82,10 +79,10 @@ module GhostWriter
 
   private
   def doc_dir
-    GhostWriter.output_path + described_class.to_s.underscore
+    GhostWriter.output_dir + described_class.to_s.underscore
   end
 
-  def doc_name
+  def doc_name(example)
     metadata = example.metadata[:generate_api_doc] || example.metadata[:ghost_writer]
     case metadata
     when String, Symbol
@@ -96,11 +93,14 @@ module GhostWriter
   end
 
   included do
-    after do
+    after do |example_or_group|
+      example = example_or_group.is_a?(RSpec::Core::Example) ?
+        example_or_group :
+        example_or_group.example
       target_type = example.metadata[:type] == :controller || example.metadata[:type] == :request
       target_metadata = example.metadata[:generate_api_doc] || example.metadata[:ghost_writer]
       if target_type && target_metadata
-        collect_example if GhostWriter.output_flag
+        collect_example(example) if GhostWriter.output_flag
       end
     end
   end

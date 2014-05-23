@@ -25,5 +25,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'rake', ['>= 0']
   gem.add_development_dependency 'rails', ['>= 3.2.9', '< 5']
+  gem.add_development_dependency 'sqlite3'
   gem.add_development_dependency 'tapp'
+  gem.add_development_dependency 'pry'
 end

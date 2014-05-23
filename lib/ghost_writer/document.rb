@@ -6,7 +6,7 @@ class GhostWriter::Document
 
   def initialize(basename, attrs)
     @basename         = basename
-    @relative_path    = Pathname.new(basename).relative_path_from(GhostWriter.output_path)
+    @relative_path    = basename
     @title            = attrs[:title]
     @description      = attrs[:description]
     @location         = attrs[:location]

@@ -15,3 +15,8 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+
+/api_docs
+/api_examples
+
+gemfiles/*.lock
