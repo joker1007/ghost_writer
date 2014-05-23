@@ -27,6 +27,9 @@ class GhostWriter::Document
 
   def serialized_params
     Oj.dump(param_example)
+  rescue NoMemoryError, StandardError
+    puts "Param serialize error: #{param_example.inspect} of #{description} at #{location}"
+    param_example.inspect
   end
 
   def response_body
