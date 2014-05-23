@@ -5,6 +5,8 @@
 
 Generate API examples from params and response of controller/request specs
 
+Support RSpec2 & RSpec3.
+
 ## Installation
 
 Add this line to your application's Gemfile:
