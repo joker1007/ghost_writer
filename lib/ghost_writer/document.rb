@@ -26,7 +26,7 @@ class GhostWriter::Document
   end
 
   def serialized_params
-    MultiJson.dump(param_example)
+    Oj.dump(param_example)
   end
 
   def response_body
@@ -54,13 +54,13 @@ class GhostWriter::Document
   def arrange_json(body)
     return body unless response_format == "json"
 
-    data = ActiveSupport::JSON.decode(body)
+    data = Oj.load(body)
     if data.is_a?(Array) || data.is_a?(Hash)
       JSON.pretty_generate(data)
     else
       data
     end
-  rescue MultiJson::DecodeError
+  rescue Oj::Error
     body
   end
 end

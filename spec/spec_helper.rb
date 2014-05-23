@@ -14,6 +14,7 @@ ActiveRecord::Base.establish_connection(
 require "rails_app/config/environment"
 I18n.load_path << File.expand_path("../support/locale/en.yml", __FILE__)
 
+require 'rspec/rails'
 require 'ghost_writer'
 
 class NullObject

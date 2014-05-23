@@ -7,7 +7,7 @@ class MockServer
     case [request.request_method, request.path_info, params]
     <% document_group.each do |output, docs| -%>
     <% docs.each do |d| -%>
-    when [<%= d.request_method.inspect %>, <%= d.path_info.inspect %>, recursive_to_s(<%= MultiJson.load(d.serialized_params).inspect %>)]
+    when [<%= d.request_method.inspect %>, <%= d.path_info.inspect %>, recursive_to_s(<%= Oj.load(d.serialized_params).inspect %>)]
       [200, {"Content-Type" => <%= d.content_type.inspect %>}, [(<<BODY)]]
 <%= d.response_body %>
 BODY
